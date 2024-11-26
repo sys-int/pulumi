@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Login to GitHub Container Registry'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+      - name: 'Get Pulumi Version'
+        id: version
+        run: |
+          export PULUMI_VERSION=$(curl --retry 3 --fail --silent -L "https://www.pulumi.com/latest-version")
+          echo "VERSION=$PULUMI_VERSION" >> "$GITHUB_OUTPUT"
+      - name: 'Build Image for Python ${{ matrix.python-version }}'
+        run: |
+          docker build . --tag ghcr.io/sys-int/pulumi-python-${{matrix.python-version}}:${{ steps.version.outputs.VERSION }}
+          docker push ghcr.io/sys-int/pulumi-python-${{matrix.python-version}}:${{ steps.version.outputs.VERSION }}
+
