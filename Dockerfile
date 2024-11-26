@@ -34,6 +34,11 @@ RUN apt-get update -y && \
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/usr/local/share/pypoetry python3 -
 RUN ln -s /usr/local/share/pypoetry/bin/poetry /usr/local/bin/
 
+RUN mkdir -p /dev/net
+RUN mknod /dev/net/tun c 10 200
+RUN chmod 600 /dev/net/tun
+
+
 # Uses the workdir, copies from pulumi interim container
 COPY --from=builder /root/.pulumi/bin/pulumi /pulumi/bin/pulumi
 COPY --from=builder /root/.pulumi/bin/*-python* /pulumi/bin/
