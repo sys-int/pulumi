@@ -26,6 +26,7 @@ RUN apt-get update -y && \
     curl \
     git \
     ca-certificates \
+    sudo \
     openvpn \
     openvpn-systemd-resolved
 
