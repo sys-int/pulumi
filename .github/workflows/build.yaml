@@ -25,6 +25,7 @@ jobs:
           echo "VERSION=$PULUMI_VERSION" >> "$GITHUB_OUTPUT"
       - name: 'Build Image for Python ${{ matrix.python-version }}'
         run: |
-          docker build .  --build-arg LANGUAGE_VERSION=${{matrix.python-version}} --build-arg PULUMI_VERSION=${{ steps.version.outputs.VERSION }} --tag ghcr.io/sys-int/pulumi-python-${{matrix.python-version}}:${{ steps.version.outputs.VERSION }}
+          docker build .  --build-arg LANGUAGE_VERSION=${{matrix.python-version}} --build-arg PULUMI_VERSION=${{ steps.version.outputs.VERSION }} --tag ghcr.io/sys-int/pulumi-python-${{matrix.python-version}}:${{ steps.version.outputs.VERSION }} --tag ghcr.io/sys-int/pulumi-python-${{matrix.python-version}}:latest
           docker push ghcr.io/sys-int/pulumi-python-${{matrix.python-version}}:${{ steps.version.outputs.VERSION }}
+          docker push ghcr.io/sys-int/pulumi-python-${{matrix.python-version}}:latest
 
