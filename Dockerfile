@@ -44,6 +44,7 @@ RUN mkdir -p /dev/net && \
 # Uses the workdir, copies from pulumi interim container
 COPY --from=builder /root/.pulumi/bin/pulumi /pulumi/bin/pulumi
 COPY --from=builder /root/.pulumi/bin/*-python* /pulumi/bin/
+COPY ./entrypoint.sh /bin/entrypoint.sh
 ENV PATH "/pulumi/bin:${PATH}"
-
+ENTRYPOINT [ "bash", "/bin/entrypoint.sh" ]
 CMD ["pulumi"]
